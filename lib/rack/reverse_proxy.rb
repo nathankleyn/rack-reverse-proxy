@@ -23,8 +23,10 @@ module Rack
           headers[$1] = value
         end
       }
-      headers['HOST'] = uri.host if all_opts[:preserve_host]
+
+      headers['Host'] = uri.host if all_opts[:preserve_host]
       headers['X-Forwarded-Host'] = rackreq.host if all_opts[:x_forwarded_host]
+      headers.merge!(all_opts[:headers]) if all_opts.include? :headers
 
       session = Net::HTTP.new(uri.host, uri.port)
       session.read_timeout=all_opts[:timeout] if all_opts[:timeout]
